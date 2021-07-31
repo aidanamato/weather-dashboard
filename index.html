@@ -4,9 +4,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <title>Weather Dashboard</title>
   </head>
   <body>
-    
+    <header>
+      <h1>Weather Dashboard</h1>
+    </header>
+
+    <main>
+      <!-- Sidebar -->
+      <div id="sidebar" class="sidebar">
+        <!-- Search Form -->
+        <form id="search" class="search">
+          <label for="search-input">Search for a City:</label>
+          <input type="text" placeholder="Search" name="search-input" />
+          <button type="submit">Search</button>
+        </form>
+
+        <div id="user-cities" class="user-cities">
+        </div>
+      </div>
+
+      <div id="body">
+        Atlanta (3/30/2021)
+      </div>
+    </main>
   </body>
 </html>
