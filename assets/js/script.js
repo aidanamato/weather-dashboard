@@ -1,5 +1,13 @@
 // DOM elements
+var searchInputEl = document.querySelector("#search input");
+var searchButtonEl = document.querySelector("#search button");
 var currentWeatherEl = document.getElementById("current-weather");
+
+var searchEventHandler = function(event) {
+  event.preventDefault();
+  var cityName = searchInputEl.value;
+  coordFetch(cityName);
+};
 
 var coordFetch = function(cityName) {
   fetch("https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=16f410708e75046ab09456e2842dea35")
@@ -16,7 +24,7 @@ var coordFetch = function(cityName) {
         alert("Something went wrong");
       }
     });
-}
+};
 
 var weatherFetch = function(lat, lon, cityName) {
   fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=16f410708e75046ab09456e2842dea35")
@@ -30,7 +38,7 @@ var weatherFetch = function(lat, lon, cityName) {
         alert("Something went wrong");
       }
     });
-} 
+}; 
 
 var parseData = function(data, cityName) {
   // data from the returned JSON
@@ -56,17 +64,17 @@ var parseData = function(data, cityName) {
 
   // Temperature
   var tempEl = document.createElement("p");
-  tempEl.textContent = "Temp: " + temp;
+  tempEl.textContent = "Temp: " + temp + "°F";
   currentWeatherEl.appendChild(tempEl);
 
   // Wind
   var windEl = document.createElement("p");
-  windEl.textContent = "Wind: " + wind;
+  windEl.textContent = "Wind: " + wind + " MPH";
   currentWeatherEl.appendChild(windEl);
 
   // Humidity
   var humidityEl = document.createElement("p");
-  humidityEl.textContent = "Humidity: " + humidity;
+  humidityEl.textContent = "Humidity: " + humidity + "%";
   currentWeatherEl.appendChild(humidityEl);
 
   // UV Index
@@ -96,6 +104,6 @@ var parseData = function(data, cityName) {
     
   }
 
-}
+};
 
-coordFetch("Atlanta");
+searchButtonEl.addEventListener("click", searchEventHandler);
