@@ -99,12 +99,45 @@ main {
 }
 
 .current-weather h2 {
+  display: flex;
+  align-items: center;
   font-size: 26px;
   margin-bottom: 12px;
 }
 
+.current-weather img {
+  height: 43px;
+  margin-left: 6px;
+}
+
 .current-weather p {
   line-height: 2.25;
+}
+
+/* UV Index Styles Start */
+.current-weather span {
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.uv-low {
+  background-color: rgb(90, 175, 90);
+}
+
+.uv-moderate {
+  background-color: rgb(255, 255, 97);
+}
+
+.uv-high {
+  background-color: orange;
+}
+
+.uv-very-high {
+  background-color: red;
+}
+
+.uv-extreme {
+  background-color: rgb(211, 40, 211);
 }
 
 .forecast {
