@@ -1,7 +1,31 @@
 // DOM elements
 var searchInputEl = document.querySelector("#search input");
 var searchButtonEl = document.querySelector("#search button");
+var userCitiesEl = document.getElementById("user-cities");
 var currentWeatherEl = document.getElementById("current-weather");
+var forecastFlexEl = document.getElementById("forecast-flex");
+
+// get localStorage
+var userCitiesArr = JSON.parse(localStorage.getItem("userCitiesArr"));
+
+if (userCitiesArr) {
+  coordFetch(userCitiesArr[0]);
+  for (var i = 0; i < userCitiesArr.length; i++) {
+    saveCity(userCitiesArr[i]);
+  }
+} else {
+  userCitiesArr = [];
+}
+
+var initializeListeners = function() {
+  // search event listener
+  searchButtonEl.addEventListener("click", searchEventHandler);
+
+  // saved cities event listener
+  userCitiesEl.addEventListener("click", function(event) {
+    coordFetch(event.target.textContent);
+  });
+};
 
 var searchEventHandler = function(event) {
   event.preventDefault();
@@ -41,6 +65,10 @@ var weatherFetch = function(lat, lon, cityName) {
 }; 
 
 var parseData = function(data, cityName) {
+  // clear previous data
+  currentWeatherEl.innerHTML = "";
+  forecastFlexEl.innerHTML = "";
+  
   // data from the returned JSON
   var date = data.current.dt;
   var icon = data.current.weather[0].icon;
@@ -101,9 +129,56 @@ var parseData = function(data, cityName) {
 
   // 5 Day Forecast
   for (var i = 0; i < 5; i++) {
+    var date = data.daily[i].dt;
+    var icon = data.daily[i].weather[0].icon;
+    var iconDescription = data.daily[i].weather[0].description;
+    var temp = data.daily[i].temp.day;
+    var wind = data.daily[i].wind_speed;
+    var humidity = data.daily[i].humidity;
+
+    var forecastCardEl = document.createElement("div");
+    forecastCardEl.className = "forecast-card";
     
+    // Date
+    var forecastDateEl = document.createElement("h4");
+    forecastDateEl.textContent = luxon.DateTime.fromSeconds(date).toFormat("(D)");
+    forecastCardEl.appendChild(forecastDateEl);
+
+    // Icon
+    var forecastIconEl = document.createElement("img");
+    forecastIconEl.setAttribute("src", "https://openweathermap.org/img/w/" + icon + ".png");
+    forecastIconEl.setAttribute("alt", "An icon denoting " + iconDescription);
+    forecastCardEl.appendChild(forecastIconEl);
+
+    // Temperature
+    var forecastTempEl = document.createElement("p");
+    forecastTempEl.textContent = "Temp: " + temp + "°F";
+    forecastCardEl.appendChild(forecastTempEl);
+
+    // Wind
+    var forecastWindEl = document.createElement("p");
+    forecastWindEl.textContent = "Wind: " + wind + " MPH";
+    forecastCardEl.appendChild(forecastWindEl);
+
+    // Humidity
+    var forecastHumidityEl = document.createElement("p");
+    forecastHumidityEl.textContent = "Humidity: " + humidity + "%";
+    forecastCardEl.appendChild(forecastHumidityEl);
+
+    forecastFlexEl.appendChild(forecastCardEl);
   }
 
+  saveCity(cityName);
 };
 
-searchButtonEl.addEventListener("click", searchEventHandler);
+var saveCity = function(cityName) {
+  // create button saving the city search
+  var cityEl = document.createElement("button");
+  cityEl.className = "city";
+  cityEl.textContent = cityName;
+  userCitiesEl.appendChild(cityEl);
+
+  
+};
+
+initializeListeners();
