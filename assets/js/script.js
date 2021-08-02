@@ -2,20 +2,9 @@
 var searchInputEl = document.querySelector("#search input");
 var searchButtonEl = document.querySelector("#search button");
 var userCitiesEl = document.getElementById("user-cities");
-var currentWeatherEl = document.getElementById("current-weather");
-var forecastFlexEl = document.getElementById("forecast-flex");
-
-// get localStorage
-var userCitiesArr = JSON.parse(localStorage.getItem("userCitiesArr"));
-
-if (userCitiesArr) {
-  coordFetch(userCitiesArr[0]);
-  for (var i = 0; i < userCitiesArr.length; i++) {
-    saveCity(userCitiesArr[i]);
-  }
-} else {
-  userCitiesArr = [];
-}
+var bodyEl = document.getElementById("body");
+var currentWeatherEl;
+var forecastFlexEl;
 
 var initializeListeners = function() {
   // search event listener
@@ -65,6 +54,15 @@ var weatherFetch = function(lat, lon, cityName) {
 }; 
 
 var parseData = function(data, cityName) {
+  // Replace placeholder element
+  var placeholderEl = document.querySelector(".placeholder-flex");
+  if (placeholderEl) {
+    bodyEl.innerHTML = "<div id='current-weather' class='current-weather'></div><div id='forecast' class='forecast'><h3>5-Day Forecast</h3><div id='forecast-flex' class='forecast-flex'></div></div>"
+
+    currentWeatherEl = document.getElementById("current-weather");
+    forecastFlexEl = document.getElementById("forecast-flex");
+  }
+  
   // clear previous data
   currentWeatherEl.innerHTML = "";
   forecastFlexEl.innerHTML = "";
@@ -172,13 +170,45 @@ var parseData = function(data, cityName) {
 };
 
 var saveCity = function(cityName) {
-  // create button saving the city search
-  var cityEl = document.createElement("button");
-  cityEl.className = "city";
-  cityEl.textContent = cityName;
-  userCitiesEl.appendChild(cityEl);
+  console.log(cityName);
+  // check if city is already saved
+  var checkDuplicate = userCitiesArr.includes(cityName);
 
-  
+  if (!checkDuplicate) {
+    // create button saving the city search
+    var cityEl = document.createElement("button");
+    cityEl.className = "city";
+    cityEl.textContent = cityName;
+    userCitiesEl.appendChild(cityEl);
+
+    // save to localStorage
+    userCitiesArr.push(cityName);
+    localStorage.setItem("userCities", JSON.stringify(userCitiesArr));
+  }
 };
+
+// get localStorage
+var userCitiesArr = JSON.parse(localStorage.getItem("userCities"));
+
+if (userCitiesArr) {
+  // set body HTML for weather info
+  bodyEl.innerHTML = "<div id='current-weather' class='current-weather'></div><div id='forecast' class='forecast'><h3>5-Day Forecast</h3><div id='forecast-flex' class='forecast-flex'></div></div>"
+  currentWeatherEl = document.getElementById("current-weather");
+  forecastFlexEl = document.getElementById("forecast-flex");
+  
+  // load data for first saved city
+  coordFetch(userCitiesArr[0]);
+
+  // load saved cities in sidebar
+  for (var i = 0; i < userCitiesArr.length; i++) {
+    var cityEl = document.createElement("button");
+    cityEl.className = "city";
+    cityEl.textContent = userCitiesArr[i];
+    userCitiesEl.appendChild(cityEl);
+  }
+} else {
+  userCitiesArr = [];
+  bodyEl.innerHTML = "<div class='placeholder-flex'><h2>Search for a city to display the weather!</h2></div>";
+}
 
 initializeListeners();

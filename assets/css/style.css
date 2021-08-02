@@ -93,6 +93,24 @@ main {
   width: 75%;
 }
 
+.placeholder-flex {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.placeholder-flex h2 {
+  font-size: 40px;
+  text-align: center;
+  padding-top: 5vh;
+  /* Background Image: Free Icon PNG, https://www.freeiconspng.com/img/11063 */
+  background-image: url("./../images/body-placeholder-background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Current Weather Styles Start */
 .current-weather {
   padding: 10px 4px;
   border: 1px solid;
@@ -113,6 +131,7 @@ main {
 .current-weather p {
   line-height: 2.25;
 }
+/* Current Weather Styles End */
 
 /* UV Index Styles Start */
 .current-weather span {
@@ -128,7 +147,7 @@ main {
 }
 
 .uv-moderate {
-  background-color: rgb(255, 255, 97);
+  background-color: rgb(233, 203, 31);
 }
 
 .uv-high {
@@ -142,7 +161,9 @@ main {
 .uv-extreme {
   background-color: rgb(211, 40, 211);
 }
+/* UV Index Styles End */
 
+/* 5 Day Forecast Styles Start */
 .forecast {
   margin-top: 12px;
 }
@@ -171,3 +192,5 @@ main {
 .forecast-card p {
   line-height: 2.25;
 }
+/* 5 Day Forecast Styles End */
+/* Body Styles End */
